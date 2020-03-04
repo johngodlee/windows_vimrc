@@ -2,6 +2,6 @@
 
 This is a vimrc which works well for me on Windows (G)Vim.
 
-Place at `PortableApps/gVimPortable/App/DefaultData/settings/_vimrc` for use with [gVim Portable](https://portableapps.com/apps/development/gvim_portable)
+Place at `PortableApps/gVimPortable/App/DefaultData/settings/_vimrc` for use with [gVim Portable](https://portableapps.com/apps/development/gvim_portable), `user/_vimrc` for normal gVim
 
 
