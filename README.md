@@ -1,7 +1,15 @@
 # Windows (G)vimrc
 
-This is a vimrc which works well for me on Windows (G)Vim.
+This is a vimrc and colour scheme which works well for me on PortableApps gVimPortable on Windows.
 
-Place at `PortableApps/gVimPortable/App/DefaultData/settings/_vimrc` for use with [gVim Portable](https://portableapps.com/apps/development/gvim_portable), `user/_vimrc` for normal gVim
+`$HOME` = `gVimPortable/Data/settings`
+
+Place `_vimrc` at `$HOME`
+
+Place `gruvbox.vim` at `$HOME/vimfiles/colors/`
+
+
+
+
 
 
