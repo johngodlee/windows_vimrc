@@ -56,9 +56,12 @@ set smartcase
 " Open maximised
 au GUIEnter * simalt ~x
 
-" Set color scheme to a comfortable default 
+" Set colour scheme to a comfortable default 
 colorscheme gruvbox
 let g:gruvbox_italic = 0
+
+" Set font
+set guifont=Lucida_Console:h10
 
 " enable syntax highlighting
 syntax on
@@ -90,6 +93,9 @@ set completeopt=longest,menuone,noselect
 " }}}
 
 " Keybindings {{{ 
+
+" Leader 
+let mapleader="\\"
 
 " Move by visual lines unless line numbers supplied
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -130,11 +136,6 @@ nnoremap dd "+dd
 " Don't add overwritten text to register
 xnoremap <expr> p 'pgv"'.v:register.'y`>'
 xnoremap <expr> P 'Pgv"'.v:register.'y`>'
-
-" Show whitespace characters
-nnoremap <Leader>m :set list!<CR>
-set listchars=tab:?\ ,eol:?,nbsp:?,trail:•,extends:?,precedes:?
-set showbreak=\ ? 
 
 " Open netrw
 nnoremap <Leader>n :Vexplore<CR>
@@ -204,7 +205,7 @@ let g:currentmode={
     \ 'ce' : 'Ex',
     \ 'r'  : 'Prompt',
     \ 'rm' : 'More',
-    \ 'r?' : 'Confirm',
+    \ 'r>' : 'Confirm',
     \ '!'  : 'Shell',
     \ 't'  : 'Terminal'
     \}
