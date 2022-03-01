@@ -90,6 +90,10 @@ set laststatus=2
 
 " Autocomplete with tab
 set completeopt=longest,menuone,noselect
+
+" Disable bells 
+set noeb vb t_vb=
+
 " }}}
 
 " Keybindings {{{ 
