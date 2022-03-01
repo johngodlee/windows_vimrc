@@ -1,8 +1,9 @@
-" _vimrc for use within GVim on Windows
-" Used for fieldwork and borrowed computers
+" vimrc for use within gVimPortable on Windows
 
-" Set folding to markers for .vimrc only 
+" Set folding to markers for vimrc only 
 " vim: foldmethod=marker
+
+" General Settings {{{
 
 " vi compatibility
 set nocompatible		
@@ -10,6 +11,83 @@ set nocompatible
 filetype off  " required 
 
 filetype plugin indent on  " required
+
+" Set mouse mode to always
+set mouse=a
+
+" Don't reset cursor to start of line when moving around
+set nostartofline
+
+" Preserve indentation on wrapped lines and make proper tabs
+set breakindent
+set autoindent
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set noexpandtab
+
+" Maintain indents on copy and new line
+set copyindent
+set preserveindent
+
+" Normal backspace behaviour 
+set backspace=2
+
+" Split to right by default
+set splitright 
+set splitbelow
+
+" Disable search highlighting
+set nohlsearch
+
+" Stop creating swp and ~ files
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Automatically cd to directory of current file
+set autochdir
+
+" Ignore case of `/` searches unless an upper case letter is used
+set ignorecase
+set smartcase
+
+" Open maximised
+au GUIEnter * simalt ~x
+
+" Set color scheme to a comfortable default 
+colorscheme gruvbox
+let g:gruvbox_italic = 0
+
+" enable syntax highlighting
+syntax on
+
+" Remove ugly vertlines in split bar (Note space after `\ `)
+set fillchars+=vert:\ 
+
+" Make end of file `~` the same colour as background
+highlight EndOfBuffer ctermfg=none ctermbg=none
+
+" enable line numbers, relative except current line
+set number relativenumber
+
+" Add cursorline
+set cursorline
+
+" Remove background
+hi Normal ctermbg=none
+
+" Ragged right line break
+set linebreak
+set wrap
+
+" Show statusline always
+set laststatus=2
+
+" Autocomplete with tab
+set completeopt=longest,menuone,noselect
+" }}}
 
 " Keybindings {{{ 
 
@@ -49,92 +127,20 @@ nnoremap p "+gp
 vnoremap d "+d
 nnoremap dd "+dd
 
+" Don't add overwritten text to register
+xnoremap <expr> p 'pgv"'.v:register.'y`>'
+xnoremap <expr> P 'Pgv"'.v:register.'y`>'
+
+" Show whitespace characters
+nnoremap <Leader>m :set list!<CR>
+set listchars=tab:?\ ,eol:?,nbsp:?,trail:•,extends:?,precedes:?
+set showbreak=\ ? 
+
 " Open netrw
 nnoremap <Leader>n :Vexplore<CR>
 
 " Toggle spellcheck
 nnoremap <Leader>s :set spell!<CR>
-" }}}
-
-" General Settings {{{
-
-" Set mouse mode 
-set mouse=a
-
-" Don't reset cursor to start of line when moving around
-set nostartofline
-
-" Preserve indentation on wrapped lines and make proper tabs!
-set breakindent
-set autoindent
-
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set noexpandtab
-
-" Maintain indents on copy and new line
-set copyindent
-set preserveindent
-
-" Normal backspace behaviour 
-set backspace=2
-
-" Split to right by default
-set splitright 
-
-" Disable search highlighting
-set nohlsearch
-
-" Interactive substitution
-set incsearch
-
-" Stop creating swp and ~ files
-set nobackup
-set nowritebackup
-set noswapfile
-
-" Automatically cd to directory of current file
-set autochdir
-
-" Ignore case of `/` searches unless an upper case letter is used
-set ignorecase
-set smartcase
-" }}}
-
-" Appearance {{{
-
-" Open maximised
-au GUIEnter * simalt ~x
-
-" Set color scheme to a comfortable default 
-colorscheme gruvbox
-let g:gruvbox_italic = 0
-
-" enable syntax highlighting
-syntax on
-
-" Remove ugly vertlines in split bar (Note space after `\ `)
-set fillchars+=vert:\ 
-
-" Make end of file `~` the same colour as background
-highlight EndOfBuffer ctermfg=none ctermbg=none
-
-" enable line numbers, relative except current line
-set number relativenumber
-
-" Add cursorline
-set cursorline
-
-" Remove background
-hi Normal ctermbg=none
-
-" Ragged right line break
-set linebreak
-set wrap
-
-" Show statusline always
-set laststatus=2
 " }}}
 
 " Folding {{{
@@ -179,6 +185,73 @@ au BufEnter *.md setlocal foldexpr=MarkdownLevel()
 au BufEnter *.md setlocal foldmethod=expr   
 " }}}
 
+" Statusline {{{
+" Modes and their codes for statusline
+let g:currentmode={
+    \ 'n'  : 'Normal',
+    \ 'no' : 'N·Operator Pending',
+    \ 'v'  : 'Visual',
+    \ 'V'  : 'V·Line',
+    \ "\<C-V>" : 'V·Block',
+    \ 's'  : 'Select',
+    \ 'S'  : 'S·Line',
+    \ "\<C-S>" : 'S·Block',
+    \ 'i'  : 'Insert',
+    \ 'R'  : 'Replace',
+    \ 'Rv' : 'V·Replace',
+    \ 'c'  : 'Command',
+    \ 'cv' : 'Vim Ex',
+    \ 'ce' : 'Ex',
+    \ 'r'  : 'Prompt',
+    \ 'rm' : 'More',
+    \ 'r?' : 'Confirm',
+    \ '!'  : 'Shell',
+    \ 't'  : 'Terminal'
+    \}
+
+" Get filesize
+function! FileSize()
+  let bytes = getfsize(expand('%:p'))
+  if (bytes >= 1024)
+    let kbytes = bytes / 1024
+  endif
+  if (exists('kbytes') && kbytes >= 1000)
+    let mbytes = kbytes / 1000
+  endif
+  if bytes <= 0
+    return '0'
+  endif
+  if (exists('mbytes'))
+    return mbytes . 'MB'
+  elseif (exists('kbytes'))
+    return kbytes . 'KB'
+  else
+    return bytes . 'B'
+  endif
+endfunction
+
+" left side
+set statusline=
+set statusline+=%#LineNr#
+set statusline+=\ %-8.{toupper(g:currentmode[mode()])} 	" Current mode
+set statusline+=\ \|\  	" Vert-line and space   
+set statusline+=%t	" File name
+set statusline+=\ \|	" Vert-line and space   
+set statusline+=%=	" Switch to right side
+
+" right side
+set statusline+=%m%r " Modified and read only flags
+set statusline+=\ 		"Space
+set statusline+=%y	" File type
+set statusline+=\ \|\ 	" Space, Vert-line and space
+set statusline+=%{FileSize()}
+set statusline+=\ \|\ 	" Space, Vert-line and space
+set statusline+=%3.p%%	" Percentage through file - min size 3
+set statusline+=\ \|\ 	" Vert-line and Space
+set statusline+=%8.(%4.l:%-3.c%)	" Line and column number in group
+set statusline+=\ 		" Space
+" }}}
+
 " netrw {{{
 
 " Remove banner
@@ -215,10 +288,8 @@ set spelllang=en_gb
 
 " Set spellfile
 set spellfile=$HOME/.vim/spell/en.utf-8.add
-" }}}
 
-" Omni-completion {{{
-
-" Autocomplete with tab
-set completeopt=longest,menuone,noselect
+" Highlighting of spelling 
+hi clear SpellBad
+hi SpellBad cterm=underline,bold ctermbg=red ctermfg=black
 " }}}

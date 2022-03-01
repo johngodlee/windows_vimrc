@@ -8,6 +8,7 @@ Place `_vimrc` at `$HOME`
 
 Place `gruvbox.vim` at `$HOME/vimfiles/colors/`
 
+Place `GVimPortable.ini` at `$HOME/../../`, i.e. the directory containing the GVimPortable executble
 
 
 
